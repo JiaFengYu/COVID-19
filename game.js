@@ -9,8 +9,6 @@ let ctx = canvas.getContext("2d");
 // img_virus.src = document.getElementById('virus');
 // let img_vaccine = new Image()
 // img_vaccine.src = document.getElementById('vaccine');
-
-
 //empty array
 let viruses = []
 let rightPressed = false;
@@ -131,7 +129,6 @@ function update(iterable){
       const hbox = 25;
       let {x: vx, y: vy} = virus;
       let {x: px, y: py} = projectile;
-      // console.log(`ASS: ${vx} ${vy} ${px} ${py}`)
       // if (projectile.x == virus.x && projectile.y == virus.y || projectile.x+10 == virus.x && projectile.y+10 == virus.y){
       if (px >= vx-hbox && px <= vx+hbox && py >= vy-hbox && py <= vy+hbox) {
         virus.hp -= 1;
@@ -186,7 +183,3 @@ function draw_everything(){
 }
 draw_everything();
 setInterval(draw_everything, 10)
-
-if (viruses.length == 0) {
-  alert("Congratulations you suck granddad's ass!")
-}
