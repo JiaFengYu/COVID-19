@@ -24,6 +24,7 @@ class Virus {
     this.y = y;
     this.radius = radius;
     this.hp = 2;
+    this.color = "red";
   }
   move(dx = 50, dy = 0) {
     this.x += dx;
@@ -61,8 +62,11 @@ for (let j = 1; j < 4; j++) {
 // let projectile = new Bullet(doctor.x - 10, doctor.y - 60, 20, 40);
 
 //This function will be used to draw each individual virus
-function drawVirus(virus, color = "red") {
+function drawVirus(virus, color = virus.color) {
   ctx.beginPath();
+  if (virus.hp == 1) {
+    virus.color = "yellow"
+  }
   ctx.arc(virus.x, virus.y, virus.radius, 0, 2*Math.PI, false);
   ctx.fillStyle = color;
   ctx.fill();
