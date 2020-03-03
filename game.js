@@ -1,15 +1,12 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-// let cotx = canvas.getContext("2d");
-// let img_virus = document.getElementById('virus');
-// let img_vaccine = document.getElementById('vaccine');
-// console.log(typeof img_virus);
+let cotx = canvas.getContext("2d");
+let img_virus = document.getElementById("virus");
+let img_vaccine = document.getElementById("vaccine");
+let img_doctor = document.getElementById("doctor");
+let wallpaper = document.getElementById("wallpaper");
+cotx.drawImage(wallpaper,0,0);
 
-// let img_virus = new Image()
-// img_virus.src = document.getElementById('virus');
-// let img_vaccine = new Image()
-// img_vaccine.src = document.getElementById('vaccine');
-//empty array
 let viruses = []
 let rightPressed = false;
 let leftPressed = false;
@@ -67,7 +64,20 @@ function drawVirus(virus, color = virus.color) {
   if (virus.hp == 1) {
     virus.color = "yellow"
   }
-  ctx.arc(virus.x, virus.y, virus.radius, 0, 2*Math.PI, false);
+  // ctx.arc(virus.x, virus.y, virus.radius, 0, 2*Math.PI, false);
+  cotx.drawImage(img_virus,virus.x,virus.y);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.closePath();
+}
+
+function drawDoctors(virus, color = virus.color) {
+  ctx.beginPath();
+  if (virus.hp == 1) {
+    virus.color = "yellow"
+  }
+  // ctx.arc(virus.x, virus.y, virus.radius, 0, 2*Math.PI, false);
+  cotx.drawImage(img_doctor,virus.x,virus.y);
   ctx.fillStyle = color;
   ctx.fill();
   ctx.closePath();
@@ -75,7 +85,8 @@ function drawVirus(virus, color = virus.color) {
 
 function drawBullet(bullet, color = '#FFFFFF') {
   ctx.beginPath();
-  ctx.rect(bullet.x, bullet.y, 10, 20);
+  // ctx.rect(bullet.x, bullet.y, 10, 20);
+  cotx.drawImage(img_vaccine,bullet.x,bullet.y);
   ctx.fillStyle = color;
   ctx.fill();
   ctx.closePath();
@@ -86,15 +97,15 @@ let projectile = null;
 //Draws all viruses.
 function draw_all(iterable){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  cotx.drawImage(wallpaper,0,0);
   for (let i = 0; i < iterable.length; i++) {
     drawVirus(iterable[i]);
-    drawVirus(doctor, "green");
+    drawDoctors(doctor, "green");
   }
   // if (spacePressed == true){
   if (projectile != null) {
     drawBullet(projectile)
   }
-
 
 }
 //Updates the viruses position
