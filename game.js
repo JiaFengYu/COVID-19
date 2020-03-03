@@ -5,6 +5,7 @@ let img_virus = document.getElementById("virus");
 let img_vaccine = document.getElementById("vaccine");
 let img_doctor = document.getElementById("doctor");
 let wallpaper = document.getElementById("wallpaper");
+let virus_dmg = document.getElementById("virus_dmg");
 cotx.drawImage(wallpaper,0,0);
 
 let viruses = []
@@ -14,82 +15,53 @@ let spacePressed = false;
 //Global variable for incrementation value
 let dx = 3
 
-//virus class
-class Virus {
-  constructor(x, y, radius){
+//generic class
+class Entity {
+  constructor(x, y, radius = 35){
     this.x = x;
     this.y = y;
-    this.radius = radius;
     this.hp = 2;
-    this.color = "red";
+    this.radius = radius;
   }
-  move(dx = 50, dy = 0) {
+  move(dx = 3, dy = 0) {
     this.x += dx;
     this.y += dy;
   }
 }
-//shooter class
-class Shooter {
-  constructor(x,y,radius){
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-  }
-}
-// bullet class
-class Bullet {
-  constructor(x, y, width, height){
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-  }
-}
+
 //doctor
-let doctor = new Shooter(640,540,20)
+let doctor = new Entity(640,540,50)
 
 // fills [viruses] array with nine viruses
 for (let j = 1; j < 4; j++) {
   for (let i = 1; i < 6; i++){
-    let virus = new Virus(80+i*70, 80*j, 20);
+    let virus = new Entity(80+i*70, 80*j);
     viruses.push(virus);
+    console.log(virus.x,virus.y);
   }
 }
 //Create a bullet
 // let projectile = new Bullet(doctor.x - 10, doctor.y - 60, 20, 40);
 
 //This function will be used to draw each individual virus
-function drawVirus(virus, color = virus.color) {
-  ctx.beginPath();
+function drawVirus(virus) {
   if (virus.hp == 1) {
-    virus.color = "yellow"
+    cotx.drawImage(virus_dmg,virus.x,virus.y);
   }
   // ctx.arc(virus.x, virus.y, virus.radius, 0, 2*Math.PI, false);
-  cotx.drawImage(img_virus,virus.x,virus.y);
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.closePath();
+  else{
+    cotx.drawImage(img_virus,virus.x,virus.y);
+  }
 }
 
-function drawDoctors(virus, color = virus.color) {
-  ctx.beginPath();
-  if (virus.hp == 1) {
-    virus.color = "yellow"
-  }
+function drawDoctors(virus) {
   // ctx.arc(virus.x, virus.y, virus.radius, 0, 2*Math.PI, false);
   cotx.drawImage(img_doctor,virus.x,virus.y);
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.closePath();
 }
 
-function drawBullet(bullet, color = '#FFFFFF') {
-  ctx.beginPath();
+function drawBullet(bullet) {
   // ctx.rect(bullet.x, bullet.y, 10, 20);
   cotx.drawImage(img_vaccine,bullet.x,bullet.y);
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.closePath();
 }
 // When projective == null, no projectile on board
 let projectile = null;
@@ -100,7 +72,7 @@ function draw_all(iterable){
   cotx.drawImage(wallpaper,0,0);
   for (let i = 0; i < iterable.length; i++) {
     drawVirus(iterable[i]);
-    drawDoctors(doctor, "green");
+    drawDoctors(doctor);
   }
   // if (spacePressed == true){
   if (projectile != null) {
@@ -114,14 +86,14 @@ function update(iterable){
     iterable[i].x += dx
     if(rightPressed) {
         doctor.x += 1;
-    if (doctor.x + doctor.radius > canvas.width){
-        doctor.x = canvas.width - doctor.radius;
+    if (doctor.x + 2*doctor.radius >= canvas.width){
+        doctor.x = canvas.width - 2*doctor.radius;
         }
     }
     else if(leftPressed) {
         doctor.x -= 1;
-        if (doctor.x < doctor.radius){
-          doctor.x = doctor.radius;
+        if (doctor.x <doctor.radius){
+          doctor.x = 0;
         }
     }
   }
@@ -162,7 +134,6 @@ function update(iterable){
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-// document.addEventListener("keyspace", keySpaceHandler, false);
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = true;
@@ -174,10 +145,10 @@ function keyDownHandler(e) {
       spacePressed = true;
       console.log("printed");
       if (projectile == null){
-        projectile = new Bullet(doctor.x - 10, doctor.y - 60, 10, 40);
+        projectile = new Entity(doctor.x - 10, doctor.y - 60);
       }
-      drawBullet(doctor.x, doctor.y, 20, 40);
-      let new_bull = new Bullet(doctor.x,doctor.y,20,40);
+      drawBullet(doctor.x, doctor.y);
+      let new_bull = new Entity(doctor.x,doctor.y);
     }
 }
 
